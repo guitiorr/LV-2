@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Engine;
+use App\Models\News;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -26,5 +27,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->count(10)->create();
 
         Engine::factory()->count(10)->create();
+
+        News::factory()->count(10)->create();
     }
 }
