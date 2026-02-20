@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Engine;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -35,7 +36,8 @@ class EngineController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        try{
+$validatedData = $request->validate([
             'displacement' => 'required|integer',
             'cylinder_count' => 'required|integer',
         ]);
@@ -51,6 +53,11 @@ class EngineController extends Controller
         ]);
 
         return redirect('/')->with('success', 'Engine created successfully.');
+        }
+        catch(QueryException $e){
+            // dd($e->getMessage());
+            return redirect()->back()->withInput()->withErrors(['db_error' => $e->getMessage()]);
+        }
     }
 
     /**

@@ -1,6 +1,12 @@
 <div>
     <h1>New Form</h1>
 
+    @if($errors->has('db_error'))
+        <div class="alert alert-danger">
+            {{ $errors->first('db_error') }}
+        </div>
+    @endif
+
     <form method="POST" action="/new/engine">
         @csrf
 
