@@ -7,3 +7,5 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [ApiAuthController::class, 'login']);
 Route::get('/news', [NewsController::class, 'getAllNews']);
 Route::post('/insert-news', [NewsController::class, 'insertNews']);
+Route::delete('/delete-news', [NewsController::class, 'deleteNews']);
+Route::post('/update-news', [NewsController::class, 'updateNews']);

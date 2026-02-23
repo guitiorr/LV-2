@@ -30,6 +30,25 @@ class NewsService
         }
     }
 
+    public function deleteNews($id)
+    {
+        try {
+            DB::statement('EXEC sp_DeleteNews @Id = ?', [$id]);
+
+            return [
+                'status' => true,
+                'message' => 'News deleted successfully'
+            ];
+
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => 'Failed to delete news',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
     public function insertNews(array $data)
     {
         try {
@@ -74,18 +93,37 @@ class NewsService
      */
     public function updateNews($id, array $data)
     {
-        $news = News::findOrFail($id);
-        $news->update($data);
-        return $news;
+        try {
+            // Use DB::statement to execute the stored procedure
+            // Order: @Id, @Title, @Content
+            DB::statement('EXEC sp_UpdateNews @Id = ?, @Title = ?, @Content = ?', [
+                $id,
+                $data['title'],
+                $data['content']
+            ]);
+
+            return [
+                'status' => true,
+                'message' => 'News updated successfully'
+            ];
+
+        } catch (\Exception $e) {
+            // This will catch the RAISERROR ('News item not found') or SQL errors
+            return [
+                'status' => false,
+                'message' => 'Failed to update news',
+                'error' => $e->getMessage()
+            ];
+        }
     }
 
     /**
      * Delete news
      */
-    public function deleteNews($id)
-    {
-        return News::destroy($id);
-    }
+    // public function deleteNews($id)
+    // {
+    //     return News::destroy($id);
+    // }
 
     /**
      * Search news by title
