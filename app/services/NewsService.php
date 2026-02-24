@@ -25,7 +25,7 @@ class NewsService
             return response()->json([
                 'status' => false,
                 'message' => 'Failed to retrieve news',
-                'error' => $e->getMessage() // Turn this off in production!
+                'error' => $e->getMessage() // Turn off in production
             ], 500);
         }
     }
@@ -52,10 +52,10 @@ class NewsService
     public function insertNews(array $data)
     {
         try {
-            // Use statement for stored procedures that don't return a result set
-            DB::statement('EXEC sp_InsertNews @Title = ?, @Content = ?', [
+            DB::statement('EXEC sp_InsertNews @Title = ?, @Content = ?, @Image = ?', [
                 $data['title'],
-                $data['content']
+                $data['content'],
+                $data['image'] ?? null
             ]);
 
             return [
@@ -94,12 +94,11 @@ class NewsService
     public function updateNews($id, array $data)
     {
         try {
-            // Use DB::statement to execute the stored procedure
-            // Order: @Id, @Title, @Content
-            DB::statement('EXEC sp_UpdateNews @Id = ?, @Title = ?, @Content = ?', [
+            DB::statement('EXEC sp_UpdateNews @Id = ?, @Title = ?, @Content = ?, @Image = ?', [
                 $id,
                 $data['title'],
-                $data['content']
+                $data['content'],
+                $data['image'] ?? null
             ]);
 
             return [
@@ -108,7 +107,6 @@ class NewsService
             ];
 
         } catch (\Exception $e) {
-            // This will catch the RAISERROR ('News item not found') or SQL errors
             return [
                 'status' => false,
                 'message' => 'Failed to update news',
