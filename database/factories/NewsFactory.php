@@ -19,7 +19,9 @@ class NewsFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'content' => fake()->paragraph(),
-            'image' => 'news/placeholder2.jpg'
+            'image' => 'news/placeholder2.jpg',
+            'is_deleted' => false,
+            'deleted_at' => null,
         ];
     }
 }
